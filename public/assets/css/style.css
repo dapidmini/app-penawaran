@@ -1,0 +1,68 @@
+html,
+body {
+    height: 100%;
+}
+
+/* .form-signin {
+  max-width: 330px;
+  padding: 1rem;
+} */
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+/* .form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+} */
+
+.vertical-center .container {
+    vertical-align: middle;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.fs-smaller {
+    font-size: 0.75em;
+}
+
+.fs-smallest {
+    font-size: 0.5em;
+}
+
+th:not(:first-child) {
+    text-align: center !important;
+}
+
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: #0489fe !important;
+    color: #fff !important;
+}
+
+.table-hover tbody tr a {
+    color: #000;
+}
+.table-hover tbody tr:hover a {
+    color: #fff;
+}
+
+.err-label {
+    color: var(--bs-form-invalid-color);
+}
