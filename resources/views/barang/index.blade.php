@@ -11,17 +11,26 @@
     @endif
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div class="h2">
-            {{ $page_title }}
-            <span class="ms-2">
+        <div class="d-flex justify-content-start align-items-center w-auto">
+            <h2>{{ $page_title }}</h2>
+            <div class="mx-2">
                 <a href="/barang/create" class="btn btn-primary">
                     <i class="bi bi-plus"></i>
                     Buat Baru
                 </a>
-            </span>
+            </div>
+
+            <form action="/barang">
+                <div class="input-group w-auto">
+                    <input type="text" class="form-control form-control-sm" placeholder="Cari nama barang" name="search">
+                    <button class="btn btn-outline-secondary" type="submit" id="btnSearch">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
         </div>
 
-        <div class="btn-toolbar mb-2 mb-md-3 d-flex justify-content-end">
+        <div class="btn-toolbar mb-2 mb-md-3 d-flex justify-content-end align-items-center">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
@@ -66,7 +75,8 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <form action="/barang/{{ $row->slug }}" method="POST" id="delete-form-{{ $row->slug }}">
+                                            <form action="/barang/{{ $row->slug }}" method="POST"
+                                                id="delete-form-{{ $row->slug }}">
                                                 @method('delete')
                                                 @csrf
                                                 <a class="dropdown-item" href="#">

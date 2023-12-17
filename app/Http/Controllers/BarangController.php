@@ -10,11 +10,17 @@ class BarangController extends Controller
 {
     public function index()
     {
+        $data = Barang::orderBy('nama', 'ASC');
+        if (request('search')) {
+            $data->where('nama', 'like', '%'.request('search').'%');
+        }
+        $data->simplePaginate(20);
+
         $view_data = [
             'page_title' => 'List Barang',
             'active' => 'barang',
             // 'username' => Auth::check() ? Auth::user() : '',
-            'data' => Barang::all(),
+            'data' => $data->get(),
         ];
         // if (Auth::check()) {
         //     dd(Auth::user());

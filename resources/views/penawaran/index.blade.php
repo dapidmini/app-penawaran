@@ -113,4 +113,7 @@
             </tbody>
         </table>
     </div>
+
+    <script src="/assets/js/penawaran.js"></script>
+
 @endsection

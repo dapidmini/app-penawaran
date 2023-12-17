@@ -20,8 +20,18 @@
                     Master
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/user">User</a></li>
-                    <li><a class="dropdown-item" href="/barang">Barang</a></li>
+                    <li>
+                        <a class="dropdown-item" href="/user">
+                            <i class="bi bi-people-fill"></i>
+                            User
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/barang">
+                            <i class="bi bi-shop"></i>
+                            Barang
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

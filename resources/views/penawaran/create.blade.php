@@ -113,18 +113,6 @@
         </div>
     </div>
 
-    <script>
-            let table = document.querySelector('form table');
-            let tblPenawaranItem = table.getElementsByTagName('tbody')[0];
-        
-            let newRow = tblPenawaranItem.insertRow(-1);
-            let cell1 = newRow.insertCell(0);
-            let cell2 = newRow.insertCell(1);
-            let cell3 = newRow.insertCell(2);
-          
-            cell1.innerHTML = 'zxc';
-            cell2.innerHTML = 'aaa';
-            cell3.innerHTML = 'lorem';
-            console.log('zzzzzzzzzz', newRow);
-    </script>
+    <script src="/assets/js/penawaran.js"></script>
+
 @endsection

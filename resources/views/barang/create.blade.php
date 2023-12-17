@@ -12,13 +12,13 @@
 
     <div class="row">
         <div class="col-md-8">
-            <form action="/barang/create" method="POST" id="form-create-barang">
+            <form action="/barang/create" method="POST" id="formCreateBarang">
                 @csrf
                 <input type="hidden" name="module" id="module" value="barang">
                 <div class="mb-3">
                     <label for="nama" class="form-label">Nama Barang</label>
                     <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
-                        name="nama" placeholder="nama barang" required value="{{ old('nama') }}" autofocus>
+                        name="nama" data-slugSelector="#slug" placeholder="nama barang" required value="{{ old('nama') }}" autofocus>
                     @error('nama')
                         {{ $message }}
                     @enderror

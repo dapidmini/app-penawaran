@@ -29,46 +29,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 elem.value = elem.value.replace(/\D/g,'');
             });
         });
-    });
-
-    
-    // script utk generate slug berdasarkan module nya
-    // slug barang berdasarkan field #nama (nama barang)
-    // slug user berdasarkan field #username (username user)
-    function generateSlug() {
-        const form = document.querySelector('form');
-        const slugField = form.querySelector('#slug');
-        const moduleField = form.querySelector('#module');
-        console.log('module', moduleField.value, moduleField);
-        let uniqueField = null;
-        if (moduleField.value == 'barang') {
-            uniqueField = form.querySelector('#nama');
-        } else if (moduleField.value == 'user') {
-            uniqueField = form.querySelector('#username');
-        }
-        console.log('uniquefield', uniqueField);
-
-        // ketika mengubah isi input box #nama (nama barang)
-        // generate otomatis slug nya
-        uniqueField.addEventListener('change', function() {
-            let url = '/home/checkSlug';
-            let qs = 'module=' + moduleField.value + '&value=' + uniqueField.value;
-            url = url + '?' + qs;
-
-            console.log('url', url);
-            fetch(url)
-                .then(response => {
-                    console.log('response', response);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('data', data);
-                    slugField.value = data.slug
-                })
-        });
-    }
-    // generateSlug();
-
+    });    
 
     // script utk delete item
     const deleteLinks = document.querySelectorAll('form[id^="delete-form"] a');
@@ -78,7 +39,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 elem.closest('form').submit();
             }
         });
-    })
+    });
+
+    // tiap elemen yg mengandung properti #data-slugSelector
+    // akan meng-auto generate kode slug 
+    // dan mengisinya ke elemen yg ditunjuk oleh #data-slugSelector
+    const elemsWithSlug = document.querySelectorAll('[data-slugSelector]');
+    elemsWithSlug.forEach((elem) => {
+        elem.addEventListener('blur', function() {
+            const formContainer = this.closest('form');
+            const slugElemSelector = this.getAttribute('data-slugSelector');
+            const slugElem = formContainer.querySelector(slugElemSelector);
+            const moduleName = formContainer.querySelector('#module').value;
+            if (slugElem) {
+                generateSlug(moduleName, elem.value).then((data) => {
+                    slugElem.value = data.slug;
+                });
+            }
+        });
+    });
 });
 
 
@@ -89,3 +68,19 @@ function addThousandSeparator(x) {
 function removeNonNumeric(x) {
     return x.toString().replace(/\D/g,'');
 }
+
+// script utk generate slug berdasarkan module nya
+// slug barang berdasarkan field #nama (nama barang)
+// slug user berdasarkan field #username (username user)
+async function generateSlug(moduleName, sourceValue) {
+    let url = '/home/checkSlug';
+    let qs = 'module=' + moduleName + '&value=' + sourceValue;
+    url = url + '?' + qs;
+
+    let slugValue = '';
+
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+// end function generateSlug();
