@@ -10,7 +10,10 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $data = Customer::orderBy('nama', 'ASC');
+        $data = Customer::orderBy('nama', 'ASC')
+            ->with(['latestPenawaranByCust' => function($query) {
+                $query->whereNotNull('updated_at');
+            }]);
             // ->with(['penawaran' => function ($query) {
             //     $query->whereNotNull('updated_at');
             //     $query->orderBy('updated_at', 'desc');

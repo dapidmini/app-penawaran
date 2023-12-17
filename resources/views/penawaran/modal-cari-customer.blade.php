@@ -24,22 +24,27 @@
                             <tr>
                                 <th scope="col" class="fit text-start px-2">#</th>
                                 <th scope="col" class="col-6">Nama Customer</th>
-                                <th scope="col" class="col-2 fit">No. Telepon</th>
-                                <th scope="col" class="col-2 fit">Penawaran Terakhir</th>
+                                <th scope="col" class="fit">No. Telepon</th>
+                                <th scope="col" class="fit">Email</th>
+                                <th scope="col" class="fit">Penawaran Terakhir</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
                             <tr data-slug="slug-customer-1">
                                 <td data-id="index" data-value="1" class="fit">1.</td>
-                                <td data-id="nama">Toko ABC</td>
-                                <td data-id="telepon" class="fit">081222333444</td>
-                                <td data-id="penawaran-terakhir" class="fit">22 November 2023</td>
+                                <td data-id="nama" class="px-2">Toko ABC</td>
+                                <td data-id="telepon" class="px-2 fit">081222333444</td>
+                                <td data-id="penawaran-terakhir" class="px-2 fit">
+                                    {{ date('d F Y H:i:s', strtotime($row->latestPenawaran->updated_at)); }}
+                                </td>
                             </tr>
                             <tr data-slug="slug-customer-2">
                                 <td data-id="index" data-value="1" class="fit">2.</td>
                                 <td data-id="nama">Indomaret 123</td>
                                 <td data-id="telepon" class="fit">081222333444</td>
-                                <td data-id="penawaran-terakhir" class="fit">22 November 2023</td>
+                                <td data-id="penawaran-terakhir" class="fit">
+                                    {{ date('d F Y H:i:s', strtotime($row->latestPenawaran->updated_at)); }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>

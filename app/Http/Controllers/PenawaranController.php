@@ -38,6 +38,7 @@ class PenawaranController extends Controller
 
     public function store(Request $request)
     {
+        $request->dd();
         // dd((int)$request['harga']);
         // $request['harga'] = (int)$request['harga'];
         // $request['stok'] = (int)$request['stok'];

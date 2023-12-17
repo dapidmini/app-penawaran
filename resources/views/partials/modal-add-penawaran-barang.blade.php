@@ -72,6 +72,7 @@
                                         <div>Nama Barang : <span id="namaBarang"></span></div>
                                         <div>Sisa Stok : <span id="stokBarang"></span></div>
                                         <div>Harga Modal : <span id="hargaBarang"></span></div>
+                                        <input type="hidden" id="slugBarang" value="xxx">
                                     </small>
                                 </div>
                                 <div class="row mb-2 fs-smaller">

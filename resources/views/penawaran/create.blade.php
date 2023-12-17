@@ -12,7 +12,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form action="/penawaran/create" method="POST" id="form-create-penawaran">
+            <form action="/penawaran/create" method="POST" id="formPenawaranCreate">
                 @csrf
                 <input type="hidden" name="module" id="module" value="penawaran">
                 <div class="mb-3">

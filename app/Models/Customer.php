@@ -21,8 +21,13 @@ class Customer extends Model
         ];
     }
 
-    public function penawaran()
+    public function penawarans()
     {
-        return $this->belongsTo(Penawaran::class);
+        return $this->hasMany(Penawaran::class, 'customer_id');
+    }
+
+    public function latestPenawaranByCust()
+    {
+        return $this->hasOne(Penawaran::class, 'customer_id')->latest('updated_at');
     }
 }

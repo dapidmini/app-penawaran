@@ -25,7 +25,11 @@ class BarangController extends Controller
         // if (Auth::check()) {
         //     dd(Auth::user());
         // }
-        return view('barang.index', $view_data);
+        if (request('fetch')) {
+            return response()->json($data->get());
+        } else {
+            return view('barang.index', $view_data);
+        }
     }
 
     public function create()
