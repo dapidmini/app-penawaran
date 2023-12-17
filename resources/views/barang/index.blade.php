@@ -10,7 +10,7 @@
         </div>
     @endif
 
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <div class="d-flex justify-content-start align-items-center w-auto">
             <h2>{{ $page_title }}</h2>
             <div class="mx-2">
@@ -46,7 +46,7 @@
 
     @if ($data->count())
         <div class="table-responsive small" style="overflow-x: unset">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped table-bordered table-hover table-sm">
                 <thead>
                     <tr class="text-center">
                         <th scope="col" class="text-start px-2">#</th>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
@@ -48,3 +49,10 @@ Route::delete('/barang/{barang:slug}', [BarangController::class, 'destroy']);
 
 // Route::get('/barang/test', [BarangController::class, 'test']);
 Route::get('/barang/fetch', [BarangController::class, 'fetchData']);
+
+Route::get('/customer', [CustomerController::class, 'index']);
+Route::get('/customer/create', [CustomerController::class, 'create']);
+Route::post('/customer/create', [CustomerController::class, 'store']);
+Route::get('/customer/{customer:slug}/edit', [CustomerController::class, 'edit']);
+Route::put('/customer/{customer:slug}/edit', [CustomerController::class, 'update']);
+Route::delete('/customer/{customer:slug}', [CustomerController::class, 'destroy']);

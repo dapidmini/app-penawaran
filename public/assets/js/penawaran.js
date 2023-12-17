@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const modalSelector = '.modal.penawaran-data-barang'
-    const modalContainer = document.querySelector(modalSelector);
-    const modalIDSelector = '#' + modalContainer.id;
+    const modalPilihBarangSelector = '.modal.penawaran-data-barang'
+    const modalPilihBarangContainer = document.querySelector(modalPilihBarangSelector);
 
     const accordDetailPenawaranBarangSelector = "#groupDetailPenawaranBarang";
 
     // ketika modal ditampilkan, inisialisasi isi tabel data barangnya
-    const btnTriggerModal = document.querySelector('[data-bs-target="'+modalIDSelector+'"]');
-    if (btnTriggerModal) {
-        btnTriggerModal.addEventListener('click', function() {
+    const btnTriggerModalPilihBarang = document.querySelector('[data-bs-target="#'+modalPilihBarangContainer.id+'"]');
+    if (btnTriggerModalPilihBarang) {
+        btnTriggerModalPilihBarang.addEventListener('click', function() {
             // kosongkan body tabel data barangnya
-            const tblContentDataBarang = modalContainer.querySelector('table tbody');
+            const tblContentDataBarang = modalPilihBarangContainer.querySelector('table tbody');
             tblContentDataBarang.innerHTML = '';
 
             // fetch data barang dr database
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 stok: tblRow.querySelector('[data-id="stok"]').innerHTML,
                                 harga: tblRow.querySelector('[data-id="harga"]').innerHTML,
                             }
-                            const containerDetailPenawaranBarang = modalContainer.querySelector('#groupDetailPenawaranBarang');
+                            const containerDetailPenawaranBarang = modalPilihBarangContainer.querySelector('#groupDetailPenawaranBarang');
                             containerDetailPenawaranBarang.querySelector('#namaBarang').innerHTML = detailBarang.nama;
                             containerDetailPenawaranBarang.querySelector('#stokBarang').innerHTML = addThousandSeparator(detailBarang.stok);
                             containerDetailPenawaranBarang.querySelector('#hargaBarang').innerHTML = 'Rp ' + addThousandSeparator(detailBarang.harga);
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             });
 
                             // buka accordion bagian Detail Penawaran Barang sekaligus tutup accordion bagian Cari Barang
-                            modalContainer.querySelector('button[data-bs-target="'+accordDetailPenawaranBarangSelector+'"]').click();
+                            modalPilihBarangContainer.querySelector('button[data-bs-target="'+accordDetailPenawaranBarangSelector+'"]').click();
                         });
                     });
                 })
@@ -70,17 +69,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('error', err);
                 });
         });
-        // end btnTriggerModal.addEventListener('click'
+        // end btnTriggerModalPilihBarang.addEventListener('click'
     }
 
-    modalContainer.querySelector('button[data-bs-target="'+accordDetailPenawaranBarangSelector+'"]').addEventListener('click', function() {
-        modalContainer.querySelector('#harga').focus();
+    modalPilihBarangContainer.querySelector('button[data-bs-target="'+accordDetailPenawaranBarangSelector+'"]').addEventListener('click', function() {
+        modalPilihBarangContainer.querySelector('#harga').focus();
     });
 
-    const detailInputElems = modalContainer.querySelectorAll('.form-control');
+    const detailInputElems = modalPilihBarangContainer.querySelectorAll('.form-control');
     detailInputElems.forEach(elem => {
         elem.addEventListener('change', function() {
-            console.log('change');
             adjustElemDetailPenawaran();
         });
     });
@@ -89,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
     {
         const hasilHitung = prosesDataBarang();
 
-        const elemSubtotal = modalContainer.querySelector('#subtotal');
-        const elemSubtotalFinal = modalContainer.querySelector('#subtotalFinal');
-        const elemProfit = modalContainer.querySelector('#profit');
+        const elemSubtotal = modalPilihBarangContainer.querySelector('#subtotal');
+        const elemSubtotalFinal = modalPilihBarangContainer.querySelector('#subtotalFinal');
+        const elemProfit = modalPilihBarangContainer.querySelector('#profit');
 
         elemSubtotal.innerHTML = 'Rp ' + addThousandSeparator(hasilHitung.subtotalJual);
         elemSubtotalFinal.innerHTML = 'Rp ' + addThousandSeparator(hasilHitung.subtotalJualFinal);
@@ -158,13 +156,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getDataBarang()
     {
-        const namaBarangElem = modalContainer.querySelector('#namaBarang');
-        const stokElem = modalContainer.querySelector('#stokBarang');
-        const hargaModalElem = modalContainer.querySelector('#hargaBarang');
-        const hargaJualElem = modalContainer.querySelector('#harga');
-        const qtyElem = modalContainer.querySelector('#qty');
-        const diskonSatuan = modalContainer.querySelector('#diskon');
-        const biayaSatuan = modalContainer.querySelector('#biaya');
+        const namaBarangElem = modalPilihBarangContainer.querySelector('#namaBarang');
+        const stokElem = modalPilihBarangContainer.querySelector('#stokBarang');
+        const hargaModalElem = modalPilihBarangContainer.querySelector('#hargaBarang');
+        const hargaJualElem = modalPilihBarangContainer.querySelector('#harga');
+        const qtyElem = modalPilihBarangContainer.querySelector('#qty');
+        const diskonSatuan = modalPilihBarangContainer.querySelector('#diskon');
+        const biayaSatuan = modalPilihBarangContainer.querySelector('#biaya');
 
         let item = {
             nama: namaBarangElem.innerHTML.trim(),
@@ -182,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // end function getDataBarang
 
-    const btnAddToPenawaran = modalContainer.querySelector('#btnAddToPenawaran');
+    const btnAddToPenawaran = modalPilihBarangContainer.querySelector('#btnAddToPenawaran');
     if (btnAddToPenawaran) {
         btnAddToPenawaran.addEventListener('click', function(e) {
             const cekInputBarang = validasiInputBarang();
@@ -190,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cekInputBarang.status != 'OK') {
                 e.preventDefault();
                 e.stopPropagation();
-                const msgInputBarang = modalContainer.querySelector('#msgInputBarang');
+                const msgInputBarang = modalPilihBarangContainer.querySelector('#msgInputBarang');
                 msgInputBarang.innerHTML = cekInputBarang.message;
                 msgInputBarang.classList.add('is-invalid');
                 return false;
@@ -225,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cell6.classList.add('text-end', 'fit');
 
             // tutup modal
-            const modalCloseBtn = modalContainer.querySelector('[data-bs-dismiss="modal"]');
+            const modalCloseBtn = modalPilihBarangContainer.querySelector('[data-bs-dismiss="modal"]');
             modalCloseBtn.click();
         });
     }
@@ -255,4 +253,78 @@ document.addEventListener('DOMContentLoaded', function() {
         return response;
     }
     // end function validasiInputBarang()
+
+    ////////////////////
+    // bagian pilih data customer
+    ////////////////////
+    // inisialisasi konten tabel data customer
+    const modalPilihCustSelector = '.modal#modalPilihCustomer';
+    const modalPilihCustContainer = document.querySelector(modalPilihCustSelector);
+
+    // const accordDetailPenawaranBarangSelector = "#groupDetailPenawaranBarang";
+
+    // ketika modal ditampilkan, inisialisasi isi tabel data customer yg ada di database
+    const btnTriggerModalPilihCust = document.querySelector('[data-bs-target="#'+modalPilihCustContainer.id+'"]');
+    if (btnTriggerModalPilihCust) {
+        btnTriggerModalPilihCust.addEventListener('click', function() {
+            // kosongkan body tabel data barangnya
+            const tblContentDataCust = modalPilihCustContainer.querySelector('table tbody');
+            tblContentDataCust.innerHTML = '';
+
+            // fetch data barang dr database
+            let url = '/customer?fetch=1';
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('data', data);
+
+                    data.forEach((item, index) => {
+                        let newRow = tblContentDataCust.insertRow(-1);
+                        let cell1 = newRow.insertCell(0);
+                        let cell2 = newRow.insertCell(1);
+                        let cell3 = newRow.insertCell(2);
+                        let cell4 = newRow.insertCell(3);
+    
+                        cell1.innerHTML = (index+1)+'.';
+                        cell1.classList.add('fit');
+                        cell1.setAttribute('data-id', 'noUrut');
+                        cell2.innerHTML = item.nama;
+                        cell2.setAttribute('data-id', 'nama');
+                        cell3.innerHTML = item.telepon;
+                        cell3.classList.add('fit', 'text-center');
+                        cell3.setAttribute('data-id', 'telepon');
+                        cell4.innerHTML = item.email;
+                        cell4.classList.add('fit', 'text-end');
+                        cell4.setAttribute('data-id', 'email');
+
+                        newRow.setAttribute('data-slug', item.slug);
+
+                        // ketika klik salah satu cell/row di tabel data customer
+                        // masukkan datanya ke bagian detail (#pilihCustomer)
+                        newRow.addEventListener('click', function() {
+                            // masukkan datanya ke bagian detail penawaran barang
+                            // const tblRow = this.closest('tr');
+                            console.log('item', item);
+                            const detailBarang = item;
+                            const containerDetailPilihCust = document.querySelectorAll('.detail-pilih-customer');
+                            containerDetailPilihCust.forEach((detailElem) => {
+                                detailElem.querySelector('#nama').innerHTML = detailBarang.nama;
+                                detailElem.querySelector('#alamat').innerHTML = detailBarang.alamat;
+                                detailElem.querySelector('#telepon').innerHTML = detailBarang.telepon;
+                                detailElem.querySelector('#email').innerHTML = detailBarang.email;
+                                detailElem.querySelector('#slug').value = detailBarang.slug;
+                            });
+                        });
+                    });
+                })
+                .catch(err => {
+                    console.log('error', err);
+                });
+        });
+        // end btnTriggerModalPilihBarang.addEventListener('click'
+    }
+    // end inisialisasi tabel data customer saat tampilkan modal
+
+    // end bagian pilih data customer
+    ////////////////////
 });

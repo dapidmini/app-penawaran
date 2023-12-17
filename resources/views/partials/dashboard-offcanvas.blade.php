@@ -32,6 +32,12 @@
                             Barang
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" href="/customer">
+                            <i class="bi bi-person-lines-fill"></i>
+                            Customer
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

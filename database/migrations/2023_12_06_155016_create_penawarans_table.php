@@ -15,11 +15,12 @@ class CreatePenawaransTable extends Migration
     {
         Schema::create('penawarans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_customer');
-            $table->string('alamat_customer');
-            $table->string('email_customer');
-            $table->string('telepon_customer');
-            $table->timestamp('user_id'); // ID user yang menginputkan data
+            $table->unsignedBigInteger('customer_id');
+            // $table->string('nama_customer');
+            // $table->string('alamat_customer');
+            // $table->string('email_customer');
+            // $table->string('telepon_customer');
+            $table->unsignedBigInteger('user_id'); // ID user yang menginputkan data
             $table->timestamps();
         });
     }

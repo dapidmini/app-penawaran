@@ -44,6 +44,7 @@ th:not(:first-child) {
     text-align: center !important;
 }
 
+.fit,
 .table td.fit,
 .table th.fit {
     white-space: nowrap;
@@ -54,6 +55,9 @@ th:not(:first-child) {
 .table-hover tbody tr:hover th {
     background-color: #0489fe !important;
     color: #fff !important;
+}
+.table-hover tbody tr:hover td .dropdown-menu a {
+    color: #000 !important;
 }
 
 .table-hover tbody tr a {

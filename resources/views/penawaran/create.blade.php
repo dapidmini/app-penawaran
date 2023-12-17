@@ -19,19 +19,17 @@
                     <div class="row">
                         <label for="colFormLabel" class="col-sm-2 col-form-label">Customer</label>
                         <div class="col-sm-10 d-flex align-items-center">
-                            <button type="button" class="btn btn-info btn-sm text-nowrap" id="btn-modal-cari-customer"
-                                data-bs-toggle="modal" data-bs-target="#modalCariCustomer">
-                                Cari Customer
+                            <button type="button" class="btn btn-info btn-sm text-nowrap" id="btnModalPilihCustomer"
+                                data-bs-toggle="modal" data-bs-target="#modalPilihCustomer">
+                                Pilih Customer
                             </button>
-                            @include('penawaran.modal-cari-customer')
+                            @include('partials.modal-pilih-customer')
                         </div>
                     </div>
                     <small>
                         <div class="row">
-                            <div class="col-sm-10 offset-sm-2" id="dataCustomer">
-                                <div>Nama : </div>
-                                <div>Alamat : </div>
-                                <div>Telepon : </div>
+                            <div class="col-sm-10 offset-sm-2">
+                                @include('partials.detail-pilih-customer')
                             </div>
                         </div>
                     </small>

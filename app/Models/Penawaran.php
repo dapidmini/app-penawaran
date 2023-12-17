@@ -20,4 +20,9 @@ class Penawaran extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function customer()
+    {
+        return $this->hasMany(Customer::class, 'customer_id'); // tabel penawaran pny field customer_id
+    }
 }
