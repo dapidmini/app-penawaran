@@ -15,14 +15,21 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#groupCariBarang" aria-expanded="true" aria-controls="groupCariBarang">
-                                Cari Barang
+                                Data Barang
                             </button>
                         </h2>
                         <div id="groupCariBarang" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <div class="table-responsive small table-content overflow-visible"
-                                    id="containerPilihBarang">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-sm" placeholder="Cari Barang" id="inputFilterBarang">
+                                    <button class="btn btn-outline-secondary" type="button" id="btnFilterBarang">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive small table-content overflow-visible overflow-y-auto"
+                                    id="containerPilihBarang" style="max-height:40vh">
                                     <table class="table table-striped table-bordered table-hover table-sm">
                                         <thead>
                                             <tr>

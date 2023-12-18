@@ -21,6 +21,7 @@ class CreatePenawaransTable extends Migration
             // $table->string('email_customer');
             // $table->string('telepon_customer');
             $table->unsignedBigInteger('user_id'); // ID user yang menginputkan data
+            $table->timestamp('tgl_pengajuan');
             $table->timestamps();
         });
     }

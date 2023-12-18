@@ -40,11 +40,11 @@
                         <label for="tglPengajuan" class="col-form-label">Tanggal Pengajuan</label>
                     </div>
                     <div class="col-auto">
-                        <input type="date" name="tglPengajuan" id="tglPengajuan"
-                            class="form-control @error('tglPengajuan') is-invalid @enderror"
+                        <input type="date" name="tgl_pengajuan" id="tglPengajuan"
+                            class="form-control @error('tgl_pengajuan') is-invalid @enderror"
                             placeholder="Tanggal Pengajuan Penawaran (format DD-MM-YYYY) e.g. 25-01-2023" required
-                            value="{{ old('tanggalPengajuan') }}">
-                        @error('tanggalPengajuan')
+                            value="{{ old('tgl_pengajuan') }}">
+                        @error('tgl_pengajuan')
                             {{ $message }}
                         @enderror
                     </div>
@@ -104,9 +104,23 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="col-sm err-label fs-smaller fst-italic" id="errMsgTableDataBarangPenawaran"></div>
+
+                    <div class="col-sm-12 fw-bold fs-5">
+                        <span>Total Penjualan :</span>
+                        <span class="me-2" id="totalPenjualanFinal">Rp 0</span>
+                    </div>
+                    <div class="col-sm-12 fw-bold fs-5">
+                        <span>Total Profit :</span>
+                        <span class="me-2" id="totalProfit">Rp 0</span>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary w-auto">Submit</button>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary w-auto">Submit</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
