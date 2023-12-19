@@ -1,6 +1,15 @@
 @extends('layouts.main')
 
 @section('content')
+    @if (session()->has('penawaranSuccess'))
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-success alert-dismissible fade show d-inline-block" role="alert">
+                {{ session('penawaranSuccess') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="h2">
             {{ $page_title }}
@@ -115,5 +124,4 @@
     </div>
 
     <script src="/assets/js/penawaran.js"></script>
-
 @endsection

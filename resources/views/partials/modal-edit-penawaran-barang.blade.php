@@ -2,11 +2,12 @@
     popup modal utk menampilkan data barang yg ada di database
     cth penggunaan utk membuat data penawaran baru
 --}}
-<div class="modal fade" id="modalEditPenawaranDataBarang" tabindex="-1" aria-labelledby="modalPenawaranDataBarangLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditPenawaranDataBarang" tabindex="-1" aria-labelledby="modalEditPenawaranDataBarangLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modalPenawaranDataBarangLabel">Edit Data Penawaran Barang</h1>
+                <h1 class="modal-title fs-5" id="modalEditPenawaranDataBarangLabel">Edit Data Penawaran Barang</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -27,6 +28,7 @@
                                         <div>Nama Barang : <span id="namaBarang"></span></div>
                                         <div>Sisa Stok : <span id="stokBarang"></span></div>
                                         <div>Harga Modal : <span id="hargaBarang"></span></div>
+                                        <input type="hidden" id="slugBarang" value="xxx">
                                     </small>
                                 </div>
                                 <div class="row mb-2 fs-smaller">
@@ -63,47 +65,49 @@
                                 <div class="row mb-2 fs-smaller">
                                     <div class="col-sm-6">
                                         <div class="row g-2 align-items-center">
-                                            <div class="col-auto">
-                                                <label for="diskon" class="col-form-label">Diskon : </label>
+                                            <div class="col-auto align-items-center">
+                                                <label for="diskon" class="col-form-label">Diskon (/satuan) : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" data-type="number" id="diskon"
                                                     class="form-control form-control-sm"
                                                     placeholder="diskon harga penawaran barang">
-                                            </div>
-                                            <div class="col-auto">
-                                                <span id="diskonTextInline" class="form-text">
-                                                    / satuan
-                                                </span>
+                                                <span id="nilaiDiskonSatuan" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="row g-2 align-items-center">
                                             <div class="col-auto">
-                                                <label for="biaya" class="col-form-label">Biaya : </label>
+                                                <label for="biaya" class="col-form-label">Biaya (/satuan) : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" data-type="number" id="biaya"
                                                     class="form-control form-control-sm"
                                                     placeholder="biaya harga penawaran barang">
-                                            </div>
-                                            <div class="col-auto">
-                                                <span id="biayaTextInline" class="form-text">
-                                                    / satuan
-                                                </span>
+                                                <span id="nilaiBiayaSatuan" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <div class="row g-2 align-items-center">
                                             <div class="col-auto">
-                                                <label for="subtotal" class="col-form-label">Subtotal : </label>
+                                                <label for="subtotalJualSatuan" class="col-form-label">Subtotal Jual : </label>
                                             </div>
                                             <div class="col-auto">
-                                                <label class="col-form-label" id="subtotal">Rp 0</label>
+                                                <label class="col-form-label" id="subtotalJualSatuan">Rp 0</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-auto">
+                                                <label for="subtotalModal" class="col-form-label">Subtotal Modal : </label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="col-form-label" id="subtotalModal">Rp 0</label>
                                             </div>
                                         </div>
                                     </div>
@@ -112,24 +116,26 @@
                                     <div class="col-sm-6">
                                         <div class="row g-2 align-items-center">
                                             <div class="col-auto">
-                                                <label for="diskonKumulatif" class="col-form-label">Diskon Kumulatif : </label>
+                                                <label for="diskonSubtotal" class="col-form-label">Diskon Subtotal : </label>
                                             </div>
                                             <div class="col-auto">
-                                                <input type="text" data-type="number" id="diskonKumulatif"
+                                                <input type="text" data-type="number" id="diskonSubtotal"
                                                     class="form-control form-control-sm"
-                                                    placeholder="diskon Kumulatif harga penawaran barang">
+                                                    placeholder="diskon Subtotal harga penawaran barang">
+                                                <span id="nilaiDiskonSubtotal" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="row g-2 align-items-center">
                                             <div class="col-auto">
-                                                <label for="biayaKumulatif" class="col-form-label">Biaya Kumulatif : </label>
+                                                <label for="biayaSubtotal" class="col-form-label">Biaya Subtotal : </label>
                                             </div>
                                             <div class="col-auto">
-                                                <input type="text" data-type="number" id="biayaKumulatif"
+                                                <input type="text" data-type="number" id="biayaSubtotal"
                                                     class="form-control form-control-sm"
-                                                    placeholder="biaya Kumulatif harga penawaran barang">
+                                                    placeholder="biaya Subtotal harga penawaran barang">
+                                                <span id="nilaiBiayaSubtotal" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -173,6 +179,10 @@
                     </div>
                     {{-- /.accordion-item --}}
                 </div>
+                {{-- /.accordion --}}
             </div>
+            {{-- /.modal-body --}}
         </div>
+        {{-- /.modal-content --}}
     </div>
+</div>

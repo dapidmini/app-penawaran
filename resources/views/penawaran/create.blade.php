@@ -12,6 +12,15 @@
 
     <div class="row">
         <div class="col-md-12">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form action="/penawaran/create" method="POST" id="formPenawaranCreate">
                 @csrf
                 <input type="hidden" name="module" id="module" value="penawaran">
@@ -53,8 +62,8 @@
                 <div class="row mb-3">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Data Barang</label>
                     <div class="col-sm-10 d-flex align-items-center">
-                        <button type="button" class="btn btn-info btn-sm text-nowrap" id="btn-modal-cari-barang" data-bs-toggle="modal"
-                            data-bs-target="#modalAddPenawaranDataBarang">
+                        <button type="button" class="btn btn-info btn-sm text-nowrap" id="btn-modal-cari-barang"
+                            data-bs-toggle="modal" data-bs-target="#modalAddPenawaranDataBarang">
                             Cari Barang
                         </button>
                         @include('partials.modal-add-penawaran-barang')
@@ -63,7 +72,8 @@
 
                 <div class="row mb-3">
                     <div class="table-responsive small table-content overflow-visible overflow-y-scroll">
-                        <table class="table table-striped table-bordered table-sm table-hover" id="tableDataBarangPenawaran">
+                        <table class="table table-striped table-bordered table-sm table-hover"
+                            id="tableDataBarangPenawaran">
                             <thead>
                                 <tr>
                                     <th scope="col" class="fit text-start px-2">#</th>
@@ -72,51 +82,67 @@
                                     <th scope="col" class="fit px-2">Harga Satuan</th>
                                     <th scope="col" class="fit px-2">Subtotal</th>
                                     <th scope="col" class="fit px-2">Profit</th>
+                                    <th scope="col" class="fit px-2">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {{-- <tr>
-                                    <td class="fit">1.</td>
-                                    <td>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-show-item-penawaran"
-                                            data-slug="lampu-led-12-watt">
-                                            Lampu LED 12 watt
-                                        </a>
-                                    </td>
-                                    <td class="text-center fit">15</td>
-                                    <td class="text-end fit">Rp 15.000</td>
-                                    <td class="text-end fit">Rp 20.000</td>
-                                    <td class="text-end fit">Rp 75.000</td>
-                                </tr>
-                                <tr>
-                                    <td class="fit">2.</td>
-                                    <td>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-show-item-penawaran"
-                                            data-slug="cctv-panasonic">
-                                            CCTV Panasonic
-                                        </a>
-                                    </td>
-                                    <td class="text-center fit">10</td>
-                                    <td class="text-end fit">Rp 200.000</td>
-                                    <td class="text-end fit">Rp 220.000</td>
-                                    <td class="text-end fit">Rp 200.000</td>
-                                </tr> --}}
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <div class="col-sm err-label fs-smaller fst-italic" id="errMsgTableDataBarangPenawaran"></div>
+                </div>
+                @include('partials.modal-edit-penawaran-barang')
 
-                    <div class="col-sm-12 fw-bold fs-5">
-                        <span>Total Penjualan :</span>
-                        <span class="me-2" id="totalPenjualanFinal">Rp 0</span>
+                <div class="row mb-2" id="containerKomponenFinal">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-top">
+                            <div class="flex-shrink me-2">
+                                <label for="diskonFinalInput">Diskon Penjualan : </label>
+                            </div>
+                            <div class="flex-grow-1 pe-5">
+                                <input type="text" data-type="number" id="diskonFinalInput" name="diskon_kumulatif"
+                                    class="form-control form-control-sm" placeholder="Diskon final untuk penawaran ini"
+                                    value="0">
+                                <span id="diskonFinalValue" class="form-text fs-label-sm">Rp 0</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-12 fw-bold fs-5">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-top justify-content-end">
+                            <div class="flex-shrink me-2 ps-5">
+                                <label for="biayaFinalInput">Biaya Penjualan : </label>
+                            </div>
+                            <div class="flex-grow-1">
+                                <input type="text" data-type="number" id="biayaFinalInput" name="biaya_kumulatif"
+                                    class="form-control form-control-sm" placeholder="Biaya final untuk penawaran ini"
+                                    value="0">
+                                <span id="biayaFinalValue" class="form-text fs-label-sm">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2 fs-5">
+                    <div class="col-sm-12">
+                        <div class="d-flex align-items-top">
+                            <span>Total Penjualan Kotor :</span>
+                            <span class="me-2" id="totalPenjualanKotor">Rp 0</span>
+                            <input type="hidden" name="total_penjualan_kotor" id="totalPenjualanKotorValue">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 fw-bold">
+                        <div class="d-flex align-items-top">
+                            <span>Total Penjualan Final :</span>
+                            <span class="me-2" id="totalPenjualanFinal">Rp 0</span>
+                            <input type="hidden" name="total_penjualan_final" id="totalPenjualanFinalValue">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 fw-bold">
                         <span>Total Profit :</span>
-                        <span class="me-2" id="totalProfit">Rp 0</span>
+                        <span class="me-3" id="totalProfit">Rp 0</span>
+                        <input type="hidden" name="total_profit" id="totalProfitValue">
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-sm-12">
                         <button class="btn btn-primary w-auto">Submit</button>
                     </div>

@@ -16,11 +16,11 @@ class CreatePenawaransTable extends Migration
         Schema::create('penawarans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
-            // $table->string('nama_customer');
-            // $table->string('alamat_customer');
-            // $table->string('email_customer');
-            // $table->string('telepon_customer');
             $table->unsignedBigInteger('user_id'); // ID user yang menginputkan data
+            $table->string('penjualan_kotor'); // nilai penjualan kotor (hasil penjumlahan subtotal semua barang)
+            $table->string('diskon_kumulatif'); // diskon yg diberikan terhadap nilai penjualan akhir (kotor)
+            $table->string('biaya_kumulatif'); // biaya yg dibebankan terhadap nilai penjualan akhir (kotor)
+            $table->string('profit'); // profit akhir
             $table->timestamp('tgl_pengajuan');
             $table->timestamps();
         });

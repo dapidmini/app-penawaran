@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class PenawaranController extends Controller
 {
@@ -41,19 +42,61 @@ class PenawaranController extends Controller
 
     public function store(Request $request)
     {
+        // $data_detail = [
+        //     [
+        //         'penawaran_id' => 1,
+        //         'barang_id' => 123,
+        //         'qty' => 10,
+        //         'harga' => 15000,
+        //         'diskon_satuan' => 2000,
+        //         'biaya_satuan' => '3.5%',
+        //     ],
+        //     [
+        //         'penawaran_id' => 1,
+        //         'barang_id' => 222,
+        //         'qty' => 5,
+        //         'harga' => 12000,
+        //         'diskon_satuan' => 1000,
+        //         'biaya_satuan' => '10%',
+        //     ],
+        // ];
+        // dd($data_detail);
         // dd(request());
         // $request->dd();
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'slug_customer' => 'required|max:255',
+            'total_penjualan_kotor' => 'required|numeric|gt:0',
             'tgl_pengajuan' => 'required',
             'slug.*' => 'required|max:255',
             'stok.*' => 'required|numeric|min:1|gte:qty.*',
             'qty.*' => 'required|numeric|min:1',
-            // 'formdata' => 'required|array',
-            // 'formdata.*.slug' => 'required',
-            // 'formdata.*.qty' => 'required|min:1|gt:formdata.*.stok',
         ]);
+        if ($validator->fails()) {
+            return redirect('/penawaran/create')
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+        // $request->validate([
+        //     'customer_id' => 'required|max:255',
+        //     'total_penjualan_kotor' => 'required|numeric|gt:0',
+        //     'tgl_pengajuan' => 'required',
+        //     'slug.*' => 'required|max:255',
+        //     'stok.*' => 'required|numeric|min:1|gte:qty.*',
+        //     'qty.*' => 'required|numeric|min:1',
+        // ]);
         // $request->dd();
+
+        // populate data utk detail penawarannya
+        $arr_slug = $request->input('slug');
+        $arr_qty = $request->input('qty');
+        $arr_harga_jual = $request->input('hargaJual');
+        $arr_diskon_satuan = $request->input('diskonSatuan');
+        $arr_biaya_satuan = $request->input('biayaSatuan');
+        $arr_diskon_subtotal = $request->input('diskonSubtotal');
+        $arr_biaya_subtotal = $request->input('biayaSubtotal');
+        // $arr_subtotal_modal = $request->input('subtotalModal');
+        // $arr_subtotal_jual = $request->input('subtotalJualSatuan');
+        $arr_subtotal_barang = $request->input('subtotalJualBarang');
 
         DB::beginTransaction();
 
@@ -64,16 +107,53 @@ class PenawaranController extends Controller
             // utk dipake di tabel detail_penawaran
             // set timezone nya mjd GMT +7
             date_default_timezone_set('Asia/Jakarta');
-            $insert_data = [
+            $master_penawaran = [
                 'customer_id' => $cust_data[0]->id,
+                'penjualan_kotor' => $request->input('total_penjualan_kotor'),
+                'diskon_kumulatif' => $request->input('diskon_kumulatif'),
+                'biaya_kumulatif' => $request->input('biaya_kumulatif'),
+                'profit' => $request->input('total_profit'),
                 'user_id' => (Auth::check() ? Auth::user()->id : 99),
                 'tgl_pengajuan' => date('Y-m-d H:i:s', time()),
                 'created_at' => date('Y-m-d H:i:s', time()),
             ];
-            // dd($insert_data);
-            DB::table('penawarans')->insert($insert_data);
+            // dd($master_penawaran);
+            $insertedID = DB::table('penawarans')->insertGetId($master_penawaran);
 
-            // populate data utk detail penawarannya
+            $insert_details = [];
+            // dapatkan ID semua barang yg ada dlm penawaran tsb
+            $q = Barang::orWhereIn('slug', $arr_slug);
+            $q = $q->get();
+
+            foreach ($arr_slug as $key => $value) {
+                $tempRow = [];
+                $tempRow['penawaran_id'] = $insertedID;
+                // $tempRow['slug'] = $arr_slug[$key];
+                foreach ($q as $barang) {
+                    if ($barang->slug == $value) {
+                        $tempRow['barang_id'] = $barang->id;
+                        break;
+                    }
+                }
+                $tempRow['qty'] = $arr_qty[$key];
+                $tempRow['harga_jual'] = $arr_harga_jual[$key];
+                $tempRow['diskon_satuan'] = $arr_diskon_satuan[$key];
+                $tempRow['biaya_satuan'] = $arr_biaya_satuan[$key];
+                $tempRow['diskon_subtotal'] = $arr_diskon_subtotal[$key];
+                $tempRow['biaya_subtotal'] = $arr_biaya_subtotal[$key];
+                $tempRow['subtotal'] = $arr_subtotal_barang[$key];
+
+                $insert_details[] = $tempRow;
+            }
+            DB::table('detail_penawaran')->insert($insert_details);
+            // dd($insert_details);
+            // foreach ($q as $row) {
+            //     $arr_barang[] = [
+            //         'id' => $row->id,
+            //         'slug' => $row->slug,
+            //     ];
+            // }
+            // dd($arr_barang);
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -81,7 +161,9 @@ class PenawaranController extends Controller
             throw $th;
         }
 
-        return view('test', ['data' => $insert_data]);
+        $request->session()->flash('penawaranSuccess', 'Data Penawaran berhasil disimpan');
+
+        return redirect('/penawaran');
 
         // $message = null;
         // $stock = [];

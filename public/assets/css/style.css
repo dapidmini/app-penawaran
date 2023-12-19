@@ -32,6 +32,10 @@ body {
     text-align: left;
 }
 
+.fs-label-sm {
+    font-size: 12px;
+}
+
 .fs-small {
     font-size: 0.875em;
 }

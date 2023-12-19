@@ -17,12 +17,12 @@ class DetailPenawaran extends Migration
             $table->id();
             $table->foreignId('penawaran_id');
             $table->foreignId('barang_id');
-            $table->unsignedInteger('jumlah');
-            $table->unsignedInteger('harga'); // harga jual per satuan
-            $table->unsignedInteger('diskon_satuan'); // diskon per satuan barang
-            $table->unsignedInteger('biaya_satuan'); // biaya per satuan barang
-            $table->unsignedInteger('diskon_subtotal'); // diskon utk subtotal
-            $table->unsignedInteger('biaya_subtotal'); // biaya utk subtotal
+            $table->unsignedInteger('qty');
+            $table->unsignedInteger('harga_jual'); // harga jual per satuan
+            $table->string('diskon_satuan'); // diskon per satuan barang
+            $table->string('biaya_satuan'); // biaya per satuan barang
+            $table->string('diskon_subtotal'); // diskon utk subtotal
+            $table->string('biaya_subtotal'); // biaya utk subtotal
             $table->unsignedInteger('subtotal'); // subtotal harga jual (krn bisa didiskon di subtotalnya)
             $table->timestamps();
         });
