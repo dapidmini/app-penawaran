@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('12345'),
             'level' => 'superadmin'
         ]);
+        User::create([
+            'name' => 'Admin Toko',
+            'username' => 'admin-x1',
+            'email' => 'adminx1@gmail.com',
+            'password' => bcrypt('12345'),
+            'level' => 'admin'
+        ]);
 
         Barang::create([
             'nama' => 'Lampu LED Phillips 12 Watt',

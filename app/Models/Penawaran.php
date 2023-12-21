@@ -11,18 +11,18 @@ class Penawaran extends Model
 
     protected $guarded = ['id'];
 
-    public function detail_penawaran()
-    {
-        return $this->belongsToMany(DetailPenawaran::class, 'detail_penawaran_id');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function detail_penawaran()
+    {
+        return $this->belongsToMany(DetailPenawaran::class);
+    }
+
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class);
     }
 }

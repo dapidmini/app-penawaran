@@ -54,6 +54,7 @@
                         <th scope="col">Alamat</th>
                         <th scope="col">Telepon</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Tgl</th>
                         <th scope="col">Menu</th>
                     </tr>
                 </thead>
@@ -65,6 +66,7 @@
                             <td class="px-2">{{ $row->alamat }}</td>
                             <td class="px-2 fit">{{ $row->telepon }}</td>
                             <td class="px-2 fit">{{ $row->email }}</td>
+                            <td class="px-2 fit">{{ $row->latestPenawaranByCust??'-' }}</td>
                             <td class="text-center fit">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"

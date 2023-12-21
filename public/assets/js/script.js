@@ -2,31 +2,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let numericInputs = document.querySelectorAll("input[data-type=number]");
     
     numericInputs.forEach(elem => {
-        const value = elem.value;
-        elem.type = "text";
-        elem.value = addThousandSeparator(value); // beri pemisah ribuan
-
-        // saat masuk/mengaktifkan input dgn atribut data-type=number
-        // hilangkan semua karakter non-numerik dari value nya
-        elem.addEventListener("focus", () => {
-            elem.value = elem.value.replace(/\D/g, '');
-            elem.select();
-        });
-
-        // saat keluar dari input dgn atribut data-type=number
-        // berikan pemisah ribuan di value nya supaya mudah dibaca
-        elem.addEventListener("blur", () => {
-            const value = elem.value;
-            elem.type = "text";
-            elem.value = addThousandSeparator(value); // beri pemisah ribuan
-        });
+        adjustElemContentText(elem);
     });
 
     let forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', () => {
             numericInputs.forEach(elem => {
-                elem.value = elem.value.replace(/\D/g,'');
+                elem.value = removeNonNumeric(elem.value);
             });
         });
     });    
@@ -66,7 +49,7 @@ function addThousandSeparator(x) {
 }
 
 function removeNonNumeric(x) {
-    return x.toString().replace(/\D/g,'');
+    return x.toString().replace(/[^0-9&]/g,'');
 }
 
 // script utk generate slug berdasarkan module nya
@@ -84,3 +67,29 @@ async function generateSlug(moduleName, sourceValue) {
     return data;
 }
 // end function generateSlug();
+
+function adjustElemContentText(elem) {
+    const value = elem.value;
+    elem.type = "text";
+    elem.value = addThousandSeparator(value); // beri pemisah ribuan
+
+    // saat masuk/mengaktifkan input dgn atribut data-type=number
+    // hilangkan semua karakter non-numerik dari value nya
+    elem.addEventListener("focus", () => {
+        elem.value = elem.value.replace(/\D/g, '');
+        elem.select();
+    });
+
+    // saat keluar dari input dgn atribut data-type=number
+    // berikan pemisah ribuan di value nya supaya mudah dibaca
+    elem.addEventListener("blur", () => {
+        const value = elem.value;
+        elem.type = "text";
+        elem.value = addThousandSeparator(value); // beri pemisah ribuan
+    });
+}
+
+function removeLeadingZero(x) {
+    let result = x.toString().replace(/^0+/, '');
+    return result == '' ? '0' : result;
+}

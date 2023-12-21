@@ -14,7 +14,7 @@ class Barang extends Model
 
     public function detail_penawaran()
     {
-        return $this->belongsToMany(DetailPenawaran::class, 'detail_penawaran_id');
+        return $this->belongsToMany(DetailPenawaran::class);
     }
 
     public function sluggable(): array

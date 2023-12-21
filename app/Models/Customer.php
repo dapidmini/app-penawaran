@@ -28,6 +28,6 @@ class Customer extends Model
 
     public function latestPenawaranByCust()
     {
-        return $this->hasOne(Penawaran::class, 'customer_id')->latest('updated_at');
+        return $this->hasOne(Penawaran::class, 'customer_id')->latestOfMany();
     }
 }

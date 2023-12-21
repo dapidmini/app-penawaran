@@ -11,14 +11,25 @@
     @endif
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div class="h2">
-            {{ $page_title }}
-            <span class="ms-2">
+        <div class="d-flex justify-content-start">
+            <h2 class="me-2">{{ $page_title }}</h2>
+            <div class="me-2">
                 <a href="/penawaran/create" class="btn btn-primary">
                     <i class="bi bi-plus"></i>
                     Buat Baru
                 </a>
-            </span>
+            </div>
+            <div>
+                <form action="/penawaran">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-sm" placeholder="Cari Penawaran"
+                            id="inputFilterBarang" name="search" value="{{ old('search') }}">
+                        <button class="btn btn-outline-secondary" type="submit" id="btnFilterBarang">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="btn-toolbar mb-2 mb-md-3 d-flex justify-content-end">
@@ -36,19 +47,72 @@
     </div>
 
     <div class="table-responsive small table-content overflow-visible">
-        <table class="table table-striped table-sm">
+        <table class="table table-striped table-bordered table-hover table-sm">
             <thead>
                 <tr>
-                    <th scope="col" class="text-start px-2">#</th>
-                    <th scope="col" class="col-3">Nama Customer</th>
-                    <th scope="col" class="col-2">Tanggal Penawaran</th>
-                    <th scope="col" class="col-2">Nilai Total (Gross)</th>
-                    <th scope="col" class="col-2">Nilai Total (Nett)</th>
-                    <th scope="col" class="col-2">Profit</th>
-                    <th scope="col">Menu</th>
+                    <th scope="col" class="text-start px-2 fit">#</th>
+                    <th scope="col" class="">Nama Customer</th>
+                    <th scope="col" class="px-2 fit">Tgl Penawaran</th>
+                    <th scope="col" class="px-2 fit">Nilai Total (Gross)</th>
+                    <th scope="col" class="px-2 fit">Nilai Total (Nett)</th>
+                    @if (in_array(Auth::user()->level, ['superadmin']))
+                        <th scope="col" class="px-2 fit">Profit</th>
+                    @endif
+                    <th scope="col" class="px-2 fit">Menu</th>
                 </tr>
             </thead>
             <tbody>
+                @if (count($data) > 0)
+                {{-- @dd($data) --}}
+                    @foreach ($data as $key => $row)
+                        <tr>
+                            <td>{{ number_format($loop->index + 1) }}.</td>
+                            <td>{{ $row->customer->nama }}</td>
+                            <td class="text-nowrap px-2 text-center">{{ date('d-M-Y', strtotime($row->tgl_pengajuan)) }}</td>
+                            <td class="text-nowrap px-2 text-end">Rp {{ number_format($row->penjualan_kotor) }}</td>
+                            <td class="text-nowrap px-2 text-end">Rp {{ number_format($row->penjualan_nett) }}</td>
+                            @if (in_array(Auth::user()->level, ['superadmin']))
+                                <td class="text-nowrap px-2 text-end">Rp {{ number_format($row->profit) }}</td>
+                            @endif
+                            <td class="text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown"></button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="/penawaran/{{ $row->id }}">
+                                                <i class="bi bi-eye-fill"></i> View Detail
+                                            </a>
+                                        </li>
+                                        @if (in_array(Auth::user()->level, ['admin', 'superadmin']))
+                                            <li>
+                                                <a class="dropdown-item" href="/penawaran/{{ $row->id }}/edit">
+                                                    <i class="bi bi-pencil-square"></i> Edit
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if (in_array(Auth::user()->level, ['superadmin']))
+                                            <li>
+                                                <form action="/penawaran/{{ $row->id }}" method="POST"
+                                                    id="delete-form-slug-penawaran">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <a class="dropdown-item" href="#"
+                                                        onclick="confirmDelete('{{ $row->id }}')">
+                                                        <i class="bi bi-trash"></i> Hapus
+                                                    </a>
+                                                </form>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <p class="fst-italic">Belum ada data penawaran.</p>
+                @endif
+                {{-- 
                 <tr>
                     <td>1.</td>
                     <td>Toko ABC Jl.Tidar no.100</td>
@@ -119,6 +183,7 @@
                         </div>
                     </td>
                 </tr>
+                 --}}
             </tbody>
         </table>
     </div>

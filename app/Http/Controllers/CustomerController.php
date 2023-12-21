@@ -10,11 +10,14 @@ class CustomerController extends Controller
 {
     public function index()
     {
+        // $data = Customer::with('penawarans')
+        //             ->groupBy('slug')
+        //             ->orderBy('penawarans.tglPengajuan', 'DESC');
         $data = Customer::orderBy('nama', 'ASC')
             ->with(['latestPenawaranByCust' => function($query) {
                 $query->whereNotNull('updated_at');
             }]);
-            // ->with(['penawaran' => function ($query) {
+            // ->with(['penawarans' => function ($query) {
             //     $query->whereNotNull('updated_at');
             //     $query->orderBy('updated_at', 'desc');
             // }]);
@@ -22,6 +25,17 @@ class CustomerController extends Controller
         if (request('search')) {
             $data->where('nama', 'like', '%'.request('search').'%');
         }
+
+        // $data = $data->get();
+
+        // foreach ($data as $key => &$row) {
+
+        //     if ( ! empty($row->latestPenawaranByCust)) {
+        //         $row['tgl_pengajuan'] = json_decode($row->latestPenawaranByCust)->tgl_pengajuan;
+        //     } else {
+        //         $row['tgl_pengajuan'] = null;
+        //     }
+        // }
 
         $view_data = [
             'page_title' => 'List Customer',

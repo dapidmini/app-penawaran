@@ -1,8 +1,9 @@
+{{-- @dd($data) --}}
 @extends('layouts.main')
 
 @section('content')
     <div class="pt-3 pb-2 mb-3 border-bottom">
-        <div class="h2 d-inline">{{ $page_title }}</div>
+        <div class="h2 d-inline">{{ $page_title.';'.$submenu }}</div>
         <div class="ms-2 d-inline">
             <a href="/penawaran">
                 Kembali ke List Penawaran
@@ -21,7 +22,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="/penawaran/create" method="POST" id="formPenawaranCreate">
+            <form action="/penawaran/{{ $data->id }}/edit" method="POST" id="formPenawaranEdit">
                 @csrf
                 <input type="hidden" name="module" id="module" value="penawaran">
                 <div class="mb-3">
@@ -52,7 +53,7 @@
                         <input type="date" name="tgl_pengajuan" id="tglPengajuan"
                             class="form-control @error('tgl_pengajuan') is-invalid @enderror"
                             placeholder="Tanggal Pengajuan Penawaran (format DD-MM-YYYY) e.g. 25-01-2023" required
-                            value="{{ old('tgl_pengajuan') }}">
+                            value="{{ old('tgl_pengajuan', $data->tgl_pengajuan) }}">
                         @error('tgl_pengajuan')
                             {{ $message }}
                         @enderror
@@ -85,7 +86,19 @@
                                     <th scope="col" class="fit px-2">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach ($data->detail_penawaran as $dpenawaran)
+                                <tr>
+                                    <td scope="col" class="fit text-start px-2">{{ number_format($loop->index+1) }}.</td>
+                                    <td scope="col" class="px-2">Nama Barang</td>
+                                    <td scope="col" class="fit px-2">Qty</td>
+                                    <td scope="col" class="fit px-2">Harga Satuan</td>
+                                    <td scope="col" class="fit px-2">Subtotal</td>
+                                    <td scope="col" class="fit px-2">Profit</td>
+                                    <td scope="col" class="fit px-2">Actions</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                     <div class="col-sm err-label fs-smaller fst-italic" id="errMsgTableDataBarangPenawaran"></div>
@@ -99,7 +112,7 @@
                                 <label for="diskonFinalInput">Diskon Penjualan : </label>
                             </div>
                             <div class="flex-grow-1 pe-5">
-                                <input type="text" id="diskonFinalInput" name="diskon_kumulatif" data-type="number"
+                                <input type="text" id="diskonFinalInput" name="diskon_kumulatif"
                                     class="form-control form-control-sm" placeholder="Diskon final untuk penawaran ini"
                                     value="0">
                                 <span id="diskonFinalValue" class="form-text fs-label-sm">Rp 0</span>
@@ -112,7 +125,7 @@
                                 <label for="biayaFinalInput">Biaya Penjualan : </label>
                             </div>
                             <div class="flex-grow-1">
-                                <input type="text" id="biayaFinalInput" name="biaya_kumulatif" data-type="number"
+                                <input type="text" id="biayaFinalInput" name="biaya_kumulatif"
                                     class="form-control form-control-sm" placeholder="Biaya final untuk penawaran ini"
                                     value="0">
                                 <span id="biayaFinalValue" class="form-text fs-label-sm">Rp 0</span>
@@ -144,7 +157,11 @@
 
                 <div class="row mb-3">
                     <div class="col-sm-12">
-                        <button class="btn btn-primary w-auto">Submit</button>
+                        <button class="btn btn-primary w-auto me-2">Submit</button>
+                        <a href="#" class="delete-penawaran-{{ $data->id }} err-label text-decoration-none" style="border-bottom:1px solid red">
+                            <i class="bi bi-x"></i>
+                            Hapus data penawaran
+                        </a>
                     </div>
                 </div>
             </form>
