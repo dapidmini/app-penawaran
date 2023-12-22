@@ -12,25 +12,28 @@
             <div class="modal-body">
                 <div class="fs-smaller">Cari Nama Customer</div>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Cari Customer" id="inputFilterCustomer">
+                    <input type="text" class="form-control form-control-sm" placeholder="Cari Customer"
+                        id="inputFilterCustomer">
                     <button class="btn btn-outline-secondary" type="button" id="btnFilterCustomer">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
-                <div class="table-responsive small table-content overflow-visible mb-3">
-                    <table class="table table-striped table-bordered table-hover table-sm" id="tableDataCustomer"
-                        style="max-height: 40vh">
+                <div class="table-responsive small table-content overflow-visible mb-3" id="dataCustomerWrapper">
+                    <table class="table table-striped table-bordered table-hover table-sm d-none" style="max-height: 40vh">
                         <thead>
                             <tr>
                                 <th scope="col" class="fit text-start px-2">#</th>
                                 <th scope="col" class="col-6">Nama Customer</th>
                                 <th scope="col" class="col-2 fit">No. Telepon</th>
                                 <th scope="col" class="col-2 fit">Email</th>
-                                <th scope="col">Penawaran Terakhir</th>
                             </tr>
                         </thead>
-                        <tbody class="table-group-divider"></tbody>
+                        <tbody class="table-group-divider">
+                        </tbody>
                     </table>
+                    <div class="spinner-border icon-small" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <div class="fw-bold">Detail Customer</div>

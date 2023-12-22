@@ -49,7 +49,7 @@ function addThousandSeparator(x) {
 }
 
 function removeNonNumeric(x) {
-    return x.toString().replace(/[^0-9&]/g,'');
+    return x.toString().replace(/[^0-9,]/g,'');
 }
 
 // script utk generate slug berdasarkan module nya

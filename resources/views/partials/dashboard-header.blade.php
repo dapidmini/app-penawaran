@@ -28,8 +28,21 @@
                 {{ Auth::check() ? Auth::user()->name : '' }}
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Setting</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-gear-fill"></i>
+                        Setting
+                    </a>
+                </li>
+                <li>
+                    <form action="/logout" method="post">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Logout
+                        </button>
+                    </form>
+                </li>
             </ul>
         </li>
     </ul>

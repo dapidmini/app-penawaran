@@ -63,7 +63,7 @@
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Data Barang</label>
                     <div class="col-sm-10 d-flex align-items-center">
                         <button type="button" class="btn btn-info btn-sm text-nowrap" id="btn-modal-cari-barang"
-                            data-bs-toggle="modal" data-bs-target="#modalAddPenawaranDataBarang">
+                            data-bs-toggle="modal" data-bs-target="#modalPenawaranDataBarang">
                             Cari Barang
                         </button>
                         @include('partials.modal-add-penawaran-barang')
@@ -151,6 +151,6 @@
         </div>
     </div>
 
-    <script src="/assets/js/penawaran.js"></script>
+    <script src="/assets/js/penawaran2.js"></script>
 
 @endsection
