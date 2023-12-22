@@ -13,16 +13,21 @@ class Penawaran extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     public function detail_penawaran()
     {
-        return $this->belongsToMany(DetailPenawaran::class);
+        return $this->belongsToMany(DetailPenawaran::class, 'detail_penawarans', 'penawaran_id');
     }
 
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function barangs()
+    {
+        return $this->belongsToMany(Barang::class)->withTimestamps();
     }
 }
