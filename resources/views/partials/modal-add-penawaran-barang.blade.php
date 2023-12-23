@@ -86,7 +86,7 @@
                                                     placeholder="harga penawaran barang">
                                             </div>
                                             <div class="col-auto">
-                                                <span id="hargaTextInline" class="form-text">
+                                                <span class="form-text">
                                                     / satuan
                                                 </span>
                                             </div>
@@ -115,7 +115,7 @@
                                                 <input type="text" data-type="number" id="diskonSatuanOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="diskon harga penawaran barang">
-                                                <span id="nilaiDiskonSatuan" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="diskonSatuanValue" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -128,7 +128,7 @@
                                                 <input type="text" data-type="number" id="biayaSatuanOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="biaya harga penawaran barang">
-                                                <span id="nilaiBiayaSatuan" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="biayaSatuanValue" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                                                 <input type="text" data-type="number" id="diskonSubtotalOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="diskon Subtotal harga penawaran barang">
-                                                <span id="nilaiDiskonSubtotal" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="diskonSubtotalValue" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
                                                 <input type="text" data-type="number" id="biayaSubtotalOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="biaya Subtotal harga penawaran barang">
-                                                <span id="nilaiBiayaSubtotal" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="biayaSubtotalValue" class="form-text fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>

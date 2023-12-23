@@ -11,18 +11,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="accordion" id="accordionExample">
+                {{-- <div class="accordion" id="accordionExample"> --}}
                     {{-- <div class="accordion-item"> --}}
-                        <div id="groupDetailPenawaranBarang" class="accordion-collapse collapse"
-                            data-bs-parent="#accordionExample">
+                        <div id="groupDetailPenawaranBarang" class="">
                             {{-- <div class="accordion-body"> --}}
                                 <div class="mb-3">
                                     <small>
-                                        <div>Nama Barang : <span id="namaBarang"></span></div>
-                                        <div>Sisa Stok : <span id="stokBarang"></span></div>
-                                        <div>Harga Modal : <span id="hargaBarang"></span></div>
-                                        <input type="hidden" id="slugBarang" value="xxx">
-                                        <input type="hidden" id="idBarang" value="xxx">
+                                        <input type="hidden" id="idBarang" class="plain-text">
+                                        <input type="hidden" id="slugBarang" class="plain-text">
+                                        <div>Nama Barang : <span id="namaBarang" class="plain-text"></span></div>
+                                        <div>Sisa Stok : <span id="stokBarang" class="is-number"></span></div>
+                                        <div>Harga Modal : <span id="hargaBarang" class="is-currency"></span></div>
                                     </small>
                                 </div>
                                 <div class="row mb-2 fs-smaller">
@@ -37,7 +36,7 @@
                                                     placeholder="harga penawaran barang">
                                             </div>
                                             <div class="col-auto">
-                                                <span id="hargaTextInline" class="form-text">
+                                                <span class="form-text">
                                                     / satuan
                                                 </span>
                                             </div>
@@ -66,7 +65,7 @@
                                                 <input type="text" data-type="number" id="diskonSatuanOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="diskon harga penawaran barang">
-                                                <span id="nilaiDiskonSatuan" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="diskonSatuanValue" class="form-text is-currency fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +78,7 @@
                                                 <input type="text" data-type="number" id="biayaSatuanOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="biaya harga penawaran barang">
-                                                <span id="nilaiBiayaSatuan" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="biayaSatuanValue" class="form-text is-currency fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +90,7 @@
                                                 <label for="subtotalJualOri" class="col-form-label">Subtotal Jual : </label>
                                             </div>
                                             <div class="col-auto">
-                                                <label class="col-form-label" id="subtotalJualOri">Rp 0</label>
+                                                <label class="col-form-label is-currency" id="subtotalJualOri">Rp 0</label>
                                             </div>
                                         </div>
                                     </div>
@@ -101,7 +100,7 @@
                                                 <label for="subtotalModal" class="col-form-label">Subtotal Modal : </label>
                                             </div>
                                             <div class="col-auto">
-                                                <label class="col-form-label" id="subtotalModal">Rp 0</label>
+                                                <label class="col-form-label is-currency" id="subtotalModal">Rp 0</label>
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +115,7 @@
                                                 <input type="text" data-type="number" id="diskonSubtotalOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="diskon Subtotal harga penawaran barang">
-                                                <span id="nilaiDiskonSubtotal" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="diskonSubtotalValue" class="form-text is-currency fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +128,7 @@
                                                 <input type="text" data-type="number" id="biayaSubtotalOri"
                                                     class="form-control form-control-sm"
                                                     placeholder="biaya Subtotal harga penawaran barang">
-                                                <span id="nilaiBiayaSubtotal" class="form-text fs-label-sm">Rp 0</span>
+                                                <span id="biayaSubtotalValue" class="form-text is-currency fs-label-sm">Rp 0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +142,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-auto">
-                                                <label class="col-form-label" id="subtotalBarang">Rp 0</label>
+                                                <label class="col-form-label is-currency" id="subtotalBarang">Rp 0</label>
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +154,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-auto">
-                                                <label class="col-form-label" id="profitBarang">Rp 0</label>
+                                                <label class="col-form-label is-currency" id="profitBarang">Rp 0</label>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +162,7 @@
 
                                 <div id="msgInputBarang" class="mb-3 err-label"></div>
 
-                                <button type="button" class="btn btn-primary" id="btnUpdatePenawaran">
+                                <button type="button" class="btn btn-primary" id="btnUpdatePenawaran" data-bs-dismiss="modal">
                                     Perbarui Penawaran
                                 </button>
                             {{-- </div> --}}
@@ -172,7 +171,7 @@
                         {{-- /#groupDetailPenawaranBarang --}}
                     {{-- </div> --}}
                     {{-- /.accordion-item --}}
-                </div>
+                {{-- </div> --}}
                 {{-- /.accordion --}}
             </div>
             {{-- /.modal-body --}}

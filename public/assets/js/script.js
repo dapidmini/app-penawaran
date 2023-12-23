@@ -44,14 +44,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 
-function addThousandSeparator(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-function removeNonNumeric(x) {
-    return x.toString().replace(/[^0-9,]/g,'');
-}
-
 // script utk generate slug berdasarkan module nya
 // slug barang berdasarkan field #nama (nama barang)
 // slug user berdasarkan field #username (username user)
@@ -76,7 +68,7 @@ function adjustElemContentText(elem) {
     // saat masuk/mengaktifkan input dgn atribut data-type=number
     // hilangkan semua karakter non-numerik dari value nya
     elem.addEventListener("focus", () => {
-        elem.value = elem.value.replace(/\D/g, '');
+        elem.value = removeLeadingZero(removeNonNumeric(elem.value));
         elem.select();
     });
 
@@ -89,7 +81,27 @@ function adjustElemContentText(elem) {
     });
 }
 
+function addThousandSeparator(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function removeNonNumeric(x) {
+    return x.toString().replace(/[^0-9,%]/g,'');
+}
+
 function removeLeadingZero(x) {
     let result = x.toString().replace(/^0+/, '');
     return result == '' ? '0' : result;
+}
+
+function currencyFormat(x) {
+    return 'Rp ' + addThousandSeparator(removeLeadingZero(removeNonNumeric(x.toString())));
+}
+
+function numberFormat(x) {
+    return addThousandSeparator(removeLeadingZero(removeNonNumeric(x.toString())))
+}
+
+function plainNumber(x) {
+    return removeLeadingZero(removeNonNumeric(x.toString()));
 }
