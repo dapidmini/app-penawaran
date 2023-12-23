@@ -72,7 +72,7 @@
 
                 <div class="row mb-3">
                     <div class="table-responsive small table-content overflow-visible overflow-y-scroll">
-                        <input type="text" id="slugToEdit">
+                        <input type="hidden" id="slugToEdit">
                         <table class="table table-striped table-bordered table-sm table-hover"
                             id="tableDataBarangPenawaran">
                             <thead>

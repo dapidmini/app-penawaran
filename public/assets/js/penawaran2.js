@@ -74,27 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell4.innerHTML = item.email;
                     cell4.classList.add('px-2', 'fit', 'text-center');
                     cell4.setAttribute('data-id', 'email');
-                    // // tampilkan tgl penawaran terakhir yg diajukan kpd customer ini
-                    // let dateStr = '-';
-                    // if (item.latest_penawaran_by_cust) {
-                    //     console.log('asdasd');
-                    //     let d = new Date(item.latest_penawaran_by_cust);
-                    //     const options = {
-                    //         day: 'numeric',
-                    //         month: 'short',
-                    //         year: 'numeric',
-                    //     }
-                    //     dateStr = d.toLocaleDateString('id-ID', options);
-                    // }
-                    // cell5.innerHTML = dateStr;
-                    // cell5.classList.add('px-2', 'fit', 'text-center');
-                    // cell5.setAttribute('data-id', 'tglPenawaranTerakhir');
 
                     // ketika klik salah satu cell/row di tabel data customer
                     // masukkan datanya ke bagian detail (#pilihCustomer)
                     newRow.addEventListener('click', function() {
                         // masukkan datanya ke bagian detail penawaran barang
-                        console.log('item', item);
                         const detailBarang = item;
                         const containerDetailPilihCust = document.querySelectorAll('.detail-pilih-customer');
                         containerDetailPilihCust.forEach((detailElem) => {
@@ -103,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             detailElem.querySelector('#telepon').innerHTML = detailBarang.telepon;
                             detailElem.querySelector('#email').innerHTML = detailBarang.email;
                             detailElem.querySelector('#slug').value = detailBarang.slug;
-                            // detailElem.querySelector('#tglPenawaranTerakhir').innerHTML = dateStr;
                         });
                     });
                     // end newRow.addEventListener('click', function() 
@@ -126,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const modalPilihBarangID = 'modalPenawaranDataBarang';
     $('#'+modalPilihBarangID).on('shown.bs.modal', function() {
-        console.log('#'+modalPilihBarangID);
         // reset elements di modal tsb dulu
         resetElements('#'+modalPilihBarangID);
         // inisialisasi elemen kontainer data barang
@@ -162,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if ( ! targetElem) { return; }
                 targetElem.setAttribute('data-field', dataField);
                 targetElem.setAttribute('data-fvalue', field.value);
-                console.log('datafield', dataField, item[dataField], targetElem);
                 if (targetElem.tagName.toLowerCase() == 'input') {
                     str = addThousandSeparator(removeLeadingZero(removeNonNumeric(field.value)));
                     targetElem.value = str;
@@ -187,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // setiap kali pindah/keluar dari sebuah input element
         const inputElems = detailBarangWrapper.querySelectorAll('input');
         inputElems.forEach((inputElem) => {
-            // console.log('each', inputElem);
             inputElem.addEventListener('blur', function() {
                 adjustElemenDetailBarang(detailBarangWrapper);
             });
@@ -204,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 let tblPenawaranItem = mytable.getElementsByTagName('tbody')[0];
 
                 const hasilHitung = hitungDetailBarang(detailBarangWrapper);
-                console.log('hasil hitung', hasilHitung);
                 hasilHitung['no'] = tblPenawaranItem.querySelectorAll('tr').length + 1;
 
                 let newRow = tblPenawaranItem.insertRow(-1);
@@ -247,9 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 newInputWrapper.setAttribute('data-slug-barang', `${hasilHitung.slugBarang}`);
                 let newInputBarang;
                 let keys = Object.keys(hasilHitung); // array of keys/properties in hasilHitung object
-                console.log('keys', keys);
                 keys.forEach(itemKey => {
-                    console.log(`${itemKey} is ${hasilHitung[itemKey]}`);
                     if (itemKey == 'no') { return; }
 
                     newInputBarang = document.createElement('input');
@@ -290,7 +267,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 editBarangBtnElems.forEach((editBtn) => {
                     editBtn.addEventListener('click', function() {
                         let slugToEdit = formPenawaran.querySelector('#slugToEdit');
-                        console.log('editbtn', slugToEdit, editBtn.getAttribute('data-slug'));
                         slugToEdit.value = editBtn.getAttribute('data-slug');
                     });
                 });
@@ -303,10 +279,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const btnUpdateDataPenawaran = detailBarangWrapper.querySelector('#btnUpdatePenawaran');
         if (btnUpdateDataPenawaran) {
             btnUpdateDataPenawaran.addEventListener('click', function() {
-                // console.log('click btn update', detailBarangWrapper); return false;
                 // dapatkan data yg sudah diperbarui
                 let newData = {};
-                let str = '';
                 detailBarangWrapper.querySelectorAll('[data-field]').forEach((fieldElem) => {
                     let dataField = fieldElem.getAttribute('data-field');
                     const targetElem = detailBarangWrapper.querySelector('#'+dataField);
@@ -322,12 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
 
-                console.log('newdata', newData);
 
                 // update data di tabelnya
                 const mySlug = detailBarangWrapper.querySelector('#slugBarang').getAttribute('data-fvalue');
-                console.log('myslug', mySlug);
-                // const mytable = formPenawaran.querySelector('#tableDataBarangPenawaran');
                 const findRow = formPenawaran.querySelector(`tr[data-field="slug"][data-fvalue="${mySlug}"]`);
                 let findCell = null;
                 if (findRow) {
