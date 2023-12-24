@@ -15,6 +15,7 @@ class AddFieldsToBarangPenawaranTable extends Migration
     {
         Schema::table('barang_penawaran', function (Blueprint $table) {
             $table->unsignedInteger('qty');
+            $table->unsignedInteger('hargaBarang');
             $table->unsignedInteger('hargaJualSatuan');
             $table->unsignedInteger('diskonSatuanOri');
             $table->unsignedInteger('diskonSatuanValue');

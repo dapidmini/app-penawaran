@@ -36,6 +36,7 @@ Route::get('/penawaran', [PenawaranController::class, 'index'])->middleware('aut
 Route::get('/penawaran/create', [PenawaranController::class, 'create'])->middleware('auth');
 Route::post('/penawaran/create', [PenawaranController::class, 'store'])->middleware('auth');
 Route::get('/penawaran/{id}/edit', [PenawaranController::class, 'edit'])->middleware('auth');
+Route::get('/penawaran/{penawaran}', [PenawaranController::class, 'show'])->middleware('auth');
 
 Route::get('/user', [UserController::class, 'index'])->middleware('auth');
 Route::get('/user/create', [UserController::class, 'create'])->middleware('auth');

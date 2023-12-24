@@ -29,7 +29,7 @@ class Penawaran extends Model
     public function barangs()
     {
         return $this->belongsToMany(Barang::class)
-            ->withPivot(['qty', 'hargaJualSatuan'
+            ->withPivot(['qty', 'hargaBarang', 'hargaJualSatuan'
             , 'diskonSatuanOri', 'diskonSatuanValue'
             , 'biayaSatuanOri', 'biayaSatuanValue'])
             ->withTimestamps();
