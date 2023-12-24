@@ -1,4 +1,5 @@
 <div id="pilihCustomer" class="detail-pilih-customer">
+    <input type="hidden" name="id_customer" id="id">
     <input type="hidden" name="slug_customer" id="slug">
     <div class="row">
         <div class="col-sm-2 d-flex justify-content-between">

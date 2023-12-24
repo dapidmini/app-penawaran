@@ -152,6 +152,6 @@
         </div>
     </div>
 
-    <script src="/assets/js/penawaran2.js"></script>
+    <script src="/assets/js/penawaran.js"></script>
 
 @endsection

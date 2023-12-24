@@ -16,36 +16,40 @@ class PenawaranController extends Controller
 {
     public function index()
     {
-        $query = Penawaran::orderBy('id', 'DESC');
-        // dd($query);
-        if (request('search')) {
-            $query->with([
-                'customer' => function ($query) {
-                    $query->where('nama', 'like', '%'.request('search').'%');
-                },
-                // 'detail_penawaran.barang' => function($query) {
-                //     $query->where('nama', 'like', '%'.request('search').'%');
-                // }
-            ]);
-        }
+        $query = Penawaran::with(['customer']);
+        // dd($data[0]->customer);
+        // // dd($query);
+        // if (request('search')) {
+        //     $query->with([
+        //         'customer' => function ($query) {
+        //             $query->where('nama', 'like', '%'.request('search').'%');
+        //         },
+        //         // 'detail_penawaran.barang' => function($query) {
+        //         //     $query->where('nama', 'like', '%'.request('search').'%');
+        //         // }
+        //     ]);
+        // }
 
         $query->paginate(20);
         
         $data = $query->get();
-        
+        // dd($data->barangs);
         foreach($data as $key => $row) {
             $row['nilai_diskon_kumulatif'] = $row['diskon_kumulatif'];
             // kalau diskon kumulatif ditulis dlm bentuk persentase
             // maka hitung nilai rupiahnya
             if (strpos($row['diskon_kumulatif'], '%') !== false) {
-                $value = preg_replace("/[^0-9.]/", "", $row['diskon_kumulatif']);
+                // hapus semua karakter selain angka diskonnya (tanda persen dan spasi kalau ada)
+                $value = preg_replace("/[^0-9,]/", "", $row['diskon_kumulatif']);
+                $value = (float)str_replace(',', '.', $value);
                 $row['nilai_diskon_kumulatif'] = $row['penjualan_kotor'] * $value / 100;
             }
             $row['nilai_biaya_kumulatif'] = $row['biaya_kumulatif'];
             // kalau biaya kumulatif ditulis dlm bentuk persentase
             // maka hitung nilai rupiahnya
             if (strpos($row['biaya_kumulatif'], '%') !== false) {
-                $value = preg_replace("/[^0-9.]/", "", $row['biaya_kumulatif']);
+                $value = preg_replace("/[^0-9,]/", "", $row['biaya_kumulatif']);
+                $value = (float)str_replace(',', '.', $value);
                 $row['nilai_biaya_kumulatif'] = $row['penjualan_kotor'] * $value / 100;
             }
             $data[$key]['penjualan_nett'] = $row['penjualan_kotor'] - $row['nilai_diskon_kumulatif'] + $row['nilai_biaya_kumulatif'];
@@ -71,84 +75,117 @@ class PenawaranController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'slug_customer' => 'required|max:255',
-            'total_penjualan_kotor' => 'required|numeric|gt:0',
-            'tgl_pengajuan' => 'required',
-            'slug.*' => 'required|max:255',
-            'stok.*' => 'required|numeric|min:1|gte:qty.*',
-            'qty.*' => 'required|numeric|min:1',
-        ]);
-        if ($validator->fails()) {
-            return redirect('/penawaran/create')
-                    ->withErrors($validator)
-                    ->withInput();
-        }
+        // $request->dd();
+        $insert_data = [
+            'user_id' => Auth::user()->id,
+            'customer_id' => $request->input('id_customer'),
+            'penjualan_kotor' => $request->input('total_penjualan_kotor'),
+            'diskon_kumulatif' => $request->input('diskon_kumulatif'),
+            'biaya_kumulatif' => $request->input('biaya_kumulatif'),
+            'profit' => $request->input('total_profit'),
+            'tgl_pengajuan' => $request->input('tgl_pengajuan'),
+        ];
+        $penawaran = Penawaran::create($insert_data);
 
-        // populate data utk detail penawarannya
-        $arr_slug = $request->input('slug');
+        $insert_details = [];
+        $arr_id = $request->input('idBarang');
         $arr_qty = $request->input('qty');
-        $arr_harga_jual = $request->input('hargaJual');
-        $arr_diskon_satuan = $request->input('diskonSatuanOri');
-        $arr_biaya_satuan = $request->input('biayaSatuanOri');
-        $arr_diskon_subtotal = $request->input('diskonSubtotalOri');
-        $arr_biaya_subtotal = $request->input('biayaSubtotalOri');
-        $arr_subtotal_barang = $request->input('subtotalJualBarang');
-
-        DB::beginTransaction();
-
-        try {
-            // get customer ID berdasarkan slug_customer
-            $cust_data = Customer::where('slug', '=', request('slug_customer'))->get();
-            // simpan data master penawaran spy bs dapet value utk field penawaran_id
-            // utk dipake di tabel detail_penawarans
-            // set timezone nya mjd GMT +7
-            date_default_timezone_set('Asia/Jakarta');
-            $master_penawaran = [
-                'customer_id' => $cust_data[0]->id,
-                'penjualan_kotor' => $request->input('total_penjualan_kotor'),
-                'diskon_kumulatif' => $request->input('diskon_kumulatif'),
-                'biaya_kumulatif' => $request->input('biaya_kumulatif'),
-                'profit' => $request->input('total_profit'),
-                'user_id' => (Auth::check() ? Auth::user()->id : 99),
-                'tgl_pengajuan' => date('Y-m-d H:i:s', strtotime($request->input('tgl_pengajuan'))),
-                'created_at' => date('Y-m-d H:i:s', time()),
+        $arr_hjs = $request->input('hargaJualSatuan');
+        $arr_dso = $request->input('diskonSatuanOri');
+        $arr_dsv = $request->input('diskonSatuanValue');
+        $arr_bso = $request->input('biayaSatuanOri');
+        $arr_bsv = $request->input('biayaSatuanValue');
+        for($i=0; $i<count($arr_id); $i++) {
+            $id = $arr_id[$i];
+            $temp_arr = [
+                'qty' => $arr_qty[$i],
+                'hargaJualSatuan' => $arr_hjs[$i],
+                'diskonSatuanOri' => $arr_dso[$i],
+                'diskonSatuanValue' => $arr_dsv[$i],
+                'biayaSatuanOri' => $arr_bso[$i],
+                'biayaSatuanValue' => $arr_bsv[$i],
             ];
-            // dd($master_penawaran);
-            $insertedID = DB::table('penawarans')->insertGetId($master_penawaran);
-
-            $insert_details = [];
-            // dapatkan ID semua barang yg ada dlm penawaran tsb
-            $q = Barang::orWhereIn('slug', $arr_slug);
-            $q = $q->get();
-
-            foreach ($arr_slug as $key => $value) {
-                $tempRow = [];
-                $tempRow['penawaran_id'] = $insertedID;
-                // $tempRow['slug'] = $arr_slug[$key];
-                foreach ($q as $barang) {
-                    if ($barang->slug == $value) {
-                        $tempRow['barang_id'] = $barang->id;
-                        break;
-                    }
-                }
-                $tempRow['qty'] = $arr_qty[$key];
-                $tempRow['harga_jual'] = $arr_harga_jual[$key];
-                $tempRow['diskon_satuan'] = $arr_diskon_satuan[$key];
-                $tempRow['biaya_satuan'] = $arr_biaya_satuan[$key];
-                $tempRow['diskon_subtotal'] = $arr_diskon_subtotal[$key];
-                $tempRow['biaya_subtotal'] = $arr_biaya_subtotal[$key];
-                $tempRow['subtotal'] = $arr_subtotal_barang[$key];
-
-                $insert_details[] = $tempRow;
-            }
-            DB::table('detail_penawarans')->insert($insert_details);
-
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
+            $insert_details[$id] = $temp_arr;
         }
+        $penawaran->barangs()->sync($insert_details);
+        // $validator = Validator::make($request->all(), [
+        //     'slug_customer' => 'required|max:255',
+        //     'total_penjualan_kotor' => 'required|numeric|gt:0',
+        //     'tgl_pengajuan' => 'required',
+        //     'slug.*' => 'required|max:255',
+        //     'stok.*' => 'required|numeric|min:1|gte:qty.*',
+        //     'qty.*' => 'required|numeric|min:1',
+        // ]);
+        // if ($validator->fails()) {
+        //     return redirect('/penawaran/create')
+        //             ->withErrors($validator)
+        //             ->withInput();
+        // }
+
+        // // populate data utk detail penawarannya
+        // $arr_slug = $request->input('slug');
+        // $arr_qty = $request->input('qty');
+        // $arr_harga_jual = $request->input('hargaJual');
+        // $arr_diskon_satuan = $request->input('diskonSatuanOri');
+        // $arr_biaya_satuan = $request->input('biayaSatuanOri');
+        // $arr_diskon_subtotal = $request->input('diskonSubtotalOri');
+        // $arr_biaya_subtotal = $request->input('biayaSubtotalOri');
+        // $arr_subtotal_barang = $request->input('subtotalJualBarang');
+
+        // DB::beginTransaction();
+
+        // try {
+        //     // get customer ID berdasarkan slug_customer
+        //     $cust_data = Customer::where('slug', '=', request('slug_customer'))->get();
+        //     // simpan data master penawaran spy bs dapet value utk field penawaran_id
+        //     // utk dipake di tabel detail_penawarans
+        //     // set timezone nya mjd GMT +7
+        //     date_default_timezone_set('Asia/Jakarta');
+        //     $master_penawaran = [
+        //         'customer_id' => $cust_data[0]->id,
+        //         'penjualan_kotor' => $request->input('total_penjualan_kotor'),
+        //         'diskon_kumulatif' => $request->input('diskon_kumulatif'),
+        //         'biaya_kumulatif' => $request->input('biaya_kumulatif'),
+        //         'profit' => $request->input('total_profit'),
+        //         'user_id' => (Auth::check() ? Auth::user()->id : 99),
+        //         'tgl_pengajuan' => date('Y-m-d H:i:s', strtotime($request->input('tgl_pengajuan'))),
+        //         'created_at' => date('Y-m-d H:i:s', time()),
+        //     ];
+        //     // dd($master_penawaran);
+        //     $insertedID = DB::table('penawarans')->insertGetId($master_penawaran);
+
+        //     $insert_details = [];
+        //     // dapatkan ID semua barang yg ada dlm penawaran tsb
+        //     $q = Barang::orWhereIn('slug', $arr_slug);
+        //     $q = $q->get();
+
+        //     foreach ($arr_slug as $key => $value) {
+        //         $tempRow = [];
+        //         $tempRow['penawaran_id'] = $insertedID;
+        //         // $tempRow['slug'] = $arr_slug[$key];
+        //         foreach ($q as $barang) {
+        //             if ($barang->slug == $value) {
+        //                 $tempRow['barang_id'] = $barang->id;
+        //                 break;
+        //             }
+        //         }
+        //         $tempRow['qty'] = $arr_qty[$key];
+        //         $tempRow['harga_jual'] = $arr_harga_jual[$key];
+        //         $tempRow['diskon_satuan'] = $arr_diskon_satuan[$key];
+        //         $tempRow['biaya_satuan'] = $arr_biaya_satuan[$key];
+        //         $tempRow['diskon_subtotal'] = $arr_diskon_subtotal[$key];
+        //         $tempRow['biaya_subtotal'] = $arr_biaya_subtotal[$key];
+        //         $tempRow['subtotal'] = $arr_subtotal_barang[$key];
+
+        //         $insert_details[] = $tempRow;
+        //     }
+        //     DB::table('detail_penawarans')->insert($insert_details);
+
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     DB::rollBack();
+        //     throw $th;
+        // }
 
         $request->session()->flash('penawaranSuccess', 'Data Penawaran berhasil disimpan');
 
